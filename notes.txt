@@ -1,0 +1,74 @@
+Bike repair game
+
+Think CookServeDelicious
+Play each day, people come in with requests
+	either
+		1. Do repair on the spot or
+		2. Schedule repair to be finished by some later day
+	some repairs take a long time or a lot of focus, and some days will be busier than others
+	people will come in and say when they would like it done by after first few levels
+
+open times are 9-9 weekdays, 10-6 weekends
+busy times are 3-8 weekdays, 11-2 and 4-6 weekends
+1 hr = 1 minute? 
+	so 12 minute levels or 8 minute levels
+	   5 minutes busy      5 minutes busy (split up)
+
+repair minigames:
+	1. fill up tire
+		screw off cap
+		alternate push key and release key with good spacing
+		target certain pressure level (too high pressure pops tube)
+		screw on cap before it goes below pressure (not a problem on some tubes)
+		[[this can be made easier by buying faster / constant pumps]]
+	2. flat tire
+		(8) take wheel off bike
+		(3) take tire off rim
+		(4) replace tube in tire
+		(5) patch tire
+		(6) put tire back on rim
+		(9) put wheel back on bike
+		(1) fill up tire
+	3. take tire off of wheel
+		if tire is inflated, (7) deflate tire
+		hold down a few buttons to grip	tire
+		release in order to pull tire off
+	4. replace tube in tire
+		hold two keys to keep tire open
+		mash key to pull old tube out
+		mash key to put new tube in
+		release hold keys
+	5. patch tire
+		[[to ask: do you ever patch tires or just tubes?]]
+		if tube, can partially inflate to hear holes
+		alternate two keys to rotate tire till problem(s) is found
+		if hole, clean, sand, patch	
+		if nail/object, remove, clean, sand, patch
+		[[this applies to tubes, not tires, if you don't patch tires]]
+		[[the same minigame but just removing things would apply to tires]]
+		[[maybe there's a difficulty setting that would change whether or not the game 
+		  tells you if you've found all the holes]] 
+		[[alternatively tire can be replaced]]
+	6. put tire back on
+		reverse 3
+	7. delfate tire/tube
+		screw off cap
+		hold down button to squeeze out air faster
+		[[this can go on while you do other fixes]]
+	8. take wheel off bike
+		release brakes
+	8a. front wheel 
+		press the quick release lever
+	8b. back wheel 
+		go down to first gear
+		crank pedals
+		crank release lever
+		(sometimes) unscrew nut
+		press button to take off
+	9. put wheel on bike
+	9a. front wheel
+		press key to put in place
+	9b. back wheel
+		press key to put in place 
+		(sometimes) rescrew nut
+		
