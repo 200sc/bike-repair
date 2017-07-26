@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/200sc/go-dist/colorrange"
+	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
 
 	"github.com/oakmound/oak/alg"
@@ -23,6 +24,7 @@ var (
 	daySprite   *render.Sprite
 	daySpeed    = -.08
 	bikesPerDay = 1
+	// todo: fix this color range issue, where 255-255 will result in alpha 0
 	tireColor   = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
 	inRimColor  = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
 	outRimColor = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
@@ -149,13 +151,15 @@ type Frame struct {
 }
 
 var (
-	frameNodes  = intrange.NewLinear(5, 10)
-	frameWidth  = intrange.NewLinear(150, 350)
-	frameHeight = intrange.NewLinear(150, 500)
+	frameNodes     = intrange.NewLinear(5, 10)
+	frameWidth     = intrange.NewLinear(150, 350)
+	frameHeight    = intrange.NewLinear(150, 500)
+	frameThickness = floatrange.NewLinear(2, 20)
 )
 
 func NewFrame() Frame {
 	f := Frame{}
+	f.thickness = frameThickness.Poll()
 	w, h := frameWidth.Poll(), frameHeight.Poll()
 	xPositions := intrange.NewLinear(0, w-1)
 	yPositions := intrange.NewLinear(0, h-1)
