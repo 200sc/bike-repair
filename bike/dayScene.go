@@ -1,6 +1,7 @@
 package bike
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"path/filepath"
@@ -22,7 +23,10 @@ func DayStart(prev string, input interface{}) {
 	daySprite = render.NewSprite(154, 112, dayGradient())
 	render.Draw(daySprite, 0)
 	// Oh man this initialization is gonna suck
+	// Oh man does this initialization suckkkkk
 	bk := &Bike{}
+	bk.Frame = NewFrame()
+	bk.Frame.needsRedraw = true
 	bk.Sprite = render.NewEmptySprite(0, 0, 640, 480)
 	bk.frontWheel = Wheel{}
 	bk.frontWheel.Sprite = render.NewEmptySprite(0, 0, 1, 1)
@@ -43,7 +47,16 @@ func DayStart(prev string, input interface{}) {
 	bk.backWheel.Rim.innerColor = inRimColor.Poll()
 	// This negative thing is weird probably need to blame it on shiny
 	// todo: wheels shouldn't control their positioning, the frame should
-	bk.backWheel.SetPos(-150, 0)
+	backWheelPos := bk.Frame.nodes[bk.Frame.backWheelIndex] //.Add(
+	//intgeom.NewPoint(int(bk.backWheel.Radius()), int(bk.backWheel.Radius())))
+	bk.backWheel.SetPos(-float64(backWheelPos.X), -float64(backWheelPos.Y))
+
+	frontWheelPos := bk.Frame.nodes[bk.Frame.frontWheelIndex] //.Add(
+	//intgeom.NewPoint(int(bk.frontWheel.Radius()), int(bk.frontWheel.Radius())))
+	bk.frontWheel.SetPos(-float64(frontWheelPos.X), -float64(frontWheelPos.Y))
+
+	fmt.Println(frontWheelPos, backWheelPos)
+
 	bk.SetPos(300, 300)
 	event.GlobalBind(func(int, interface{}) int {
 		if oak.IsDown("W") {

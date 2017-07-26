@@ -34,14 +34,21 @@ func (b *Bike) Draw(buff draw.Image) {
 func (b *Bike) DrawOffset(buff draw.Image, xOff, yOff float64) {
 	rgba := b.GetRGBA()
 	// Draw frame
+	frgba := b.Frame.buildRGBA()
+	draw.Draw(rgba,
+		rgba.Bounds(),
+		frgba,
+		image.Point{int(b.Frame.X()), int(b.Frame.Y())},
+		draw.Over,
+	)
 	// Draw wheels
-	fwrgba := b.frontWheel.BuildRGBA()
+	fwrgba := b.frontWheel.buildRGBA()
 	draw.Draw(rgba,
 		rgba.Bounds(),
 		fwrgba,
 		image.Point{int(b.frontWheel.X()), int(b.frontWheel.Y())},
 		draw.Over)
-	bwrgba := b.backWheel.BuildRGBA()
+	bwrgba := b.backWheel.buildRGBA()
 	draw.Draw(rgba,
 		rgba.Bounds(),
 		bwrgba,

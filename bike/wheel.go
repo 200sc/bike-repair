@@ -34,12 +34,16 @@ type Wheel struct {
 	needsRedraw bool
 }
 
-func (wh *Wheel) BuildRGBA() *image.RGBA {
+func (wh *Wheel) Radius() float64 {
+	return wh.Rim.radius + wh.Tire.thickness + wh.Rim.thickness()
+}
+
+func (wh *Wheel) buildRGBA() *image.RGBA {
 	// if w's rgba does not need updating, just return it
 	// todo: manipulate this needsRedraw field
 	// todo: generalize this needsRedraw thing to everything on the bike
 	if wh.needsRedraw {
-		w := int((wh.Rim.radius * 2) + (wh.Tire.thickness * 2) + (wh.Rim.thickness() * 2))
+		w := int(wh.Radius() * 2)
 		h := w
 		rgba := image.NewRGBA(image.Rect(0, 0, w, h))
 		// Draw a bunch of circles

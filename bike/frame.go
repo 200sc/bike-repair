@@ -1,10 +1,13 @@
 package bike
 
 import (
+	"image"
 	"image/color"
 
+	"github.com/200sc/go-dist/colorrange"
 	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
+	"github.com/oakmound/oak/alg"
 	"github.com/oakmound/oak/alg/intgeom"
 	"github.com/oakmound/oak/render"
 )
@@ -25,24 +28,30 @@ type Frame struct {
 	// bottom center of seat
 	seatIndex int
 	// center of gears
-	gearsIndex int
+	gearsIndex  int
+	w, h        int
+	needsRedraw bool
 }
 
 var (
 	frameNodes     = intrange.NewLinear(5, 10)
 	frameWidth     = intrange.NewLinear(150, 350)
 	frameHeight    = intrange.NewLinear(150, 500)
-	frameThickness = floatrange.NewLinear(2, 20)
+	frameThickness = floatrange.NewLinear(2, 14)
+	frameColor     = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
 )
 
 func NewFrame() Frame {
 	f := Frame{}
 	f.thickness = frameThickness.Poll()
-	w, h := frameWidth.Poll(), frameHeight.Poll()
-	xPositions := intrange.NewLinear(0, w-1)
-	yPositions := intrange.NewLinear(0, h-1)
+	f.color = frameColor.Poll()
+	f.w, f.h = frameWidth.Poll(), frameHeight.Poll()
+	f.Sprite = render.NewEmptySprite(0, 0, f.w, f.h)
+	xPositions := intrange.NewLinear(0, f.w-1)
+	yPositions := intrange.NewLinear(0, f.h-1)
 	f.nodes = make([]intgeom.Point, frameNodes.Poll())
 	for i := range f.nodes {
+		// This will produce atrocious bicycles
 		f.nodes[i] = intgeom.NewPoint(xPositions.Poll(), yPositions.Poll())
 	}
 	// The bottom left most point is backWheel
@@ -50,10 +59,10 @@ func NewFrame() Frame {
 	// The top left most point is seat
 	// The top right most point is handlebars
 	// gears is any other point
-	botLeft := intgeom.NewPoint(w, 0)
-	botRight := intgeom.NewPoint(0, 0)
-	topLeft := intgeom.NewPoint(w, h)
-	topRight := intgeom.NewPoint(0, h)
+	botLeft := intgeom.NewPoint(f.w, -1)
+	botRight := intgeom.NewPoint(-1, -1)
+	topLeft := intgeom.NewPoint(f.w, f.h)
+	topRight := intgeom.NewPoint(-1, f.h)
 	for i, p := range f.nodes {
 		if p.X < botLeft.X && p.Y > botLeft.Y {
 			botLeft = p
@@ -85,5 +94,21 @@ func NewFrame() Frame {
 		}
 	}
 	// Make connections until graph is connected
+	f.connections = ConnectGraph(f.nodes)
 	return f
+}
+
+func (f *Frame) buildRGBA() *image.RGBA {
+	if f.needsRedraw {
+		rgba := image.NewRGBA(image.Rect(0, 0, f.w, f.h))
+		for i, list := range f.connections {
+			n1 := f.nodes[i]
+			for _, c := range list {
+				n2 := f.nodes[c]
+				render.DrawThickLine(rgba, n1.X, n1.Y, n2.X, n2.Y, f.color, alg.RoundF64(f.thickness))
+			}
+		}
+		f.SetRGBA(rgba)
+	}
+	return f.GetRGBA()
 }
