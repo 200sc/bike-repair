@@ -2,30 +2,9 @@ package bike
 
 import (
 	"image"
-	"image/color"
 
 	"github.com/oakmound/oak/render"
 )
-
-type Rim struct {
-	outerThickness, innerThickness float64
-	radius                         float64
-	outerColor, innerColor         color.Color
-	spokes                         int
-	spokeColor                     color.Color
-	// todo: style? emblem?
-}
-
-func (r Rim) thickness() float64 {
-	return r.outerThickness + r.innerThickness
-}
-
-type Tire struct {
-	flat      bool
-	thickness float64
-	color     color.Color
-	// todo: style / tread
-}
 
 type Wheel struct {
 	*render.Sprite
@@ -34,11 +13,27 @@ type Wheel struct {
 	needsRedraw bool
 }
 
-func (wh *Wheel) Radius() float64 {
+func NewWheel() Wheel {
+	w := Wheel{}
+	w.Sprite = render.NewEmptySprite(0, 0, 1, 1)
+	w.needsRedraw = true
+	w.Rim = NewRim()
+	w.Tire = NewTire()
+	return w
+}
+
+func NewWheelPair() (Wheel, Wheel) {
+	w := NewWheel()
+	w2 := w
+	w2.Sprite = render.NewEmptySprite(0, 0, 1, 1)
+	return w, w2
+}
+
+func (wh Wheel) Radius() float64 {
 	return wh.Rim.radius + wh.Tire.thickness + wh.Rim.thickness()
 }
 
-func (wh *Wheel) buildRGBA() *image.RGBA {
+func (wh Wheel) buildRGBA() *image.RGBA {
 	// if w's rgba does not need updating, just return it
 	// todo: manipulate this needsRedraw field
 	// todo: generalize this needsRedraw thing to everything on the bike

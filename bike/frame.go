@@ -34,11 +34,12 @@ type Frame struct {
 }
 
 var (
-	frameNodes     = intrange.NewLinear(5, 10)
-	frameWidth     = intrange.NewLinear(150, 350)
-	frameHeight    = intrange.NewLinear(150, 500)
-	frameThickness = floatrange.NewLinear(2, 14)
-	frameColor     = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
+	frameNodes             = intrange.NewLinear(5, 10)
+	frameWidth             = intrange.NewLinear(150, 500)
+	frameHeight            = intrange.NewLinear(150, 350)
+	frameThickness         = floatrange.NewLinear(2, 14)
+	frameColor             = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
+	frameExcessConnections = intrange.NewLinear(1, 4)
 )
 
 func NewFrame() Frame {
@@ -95,10 +96,12 @@ func NewFrame() Frame {
 	}
 	// Make connections until graph is connected
 	f.connections = ConnectGraph(f.nodes)
+	// Add a few more additional connections
+	f.connections = AddRandomConnections(frameExcessConnections.Poll(), f.connections)
 	return f
 }
 
-func (f *Frame) buildRGBA() *image.RGBA {
+func (f Frame) buildRGBA() *image.RGBA {
 	if f.needsRedraw {
 		rgba := image.NewRGBA(image.Rect(0, 0, f.w, f.h))
 		for i, list := range f.connections {

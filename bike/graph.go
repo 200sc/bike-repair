@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/200sc/go-dist/intrange"
 	"github.com/oakmound/oak/alg/intgeom"
 )
 
@@ -53,5 +54,29 @@ func ConnectGraph(nodes []intgeom.Point) [][]int {
 		}
 	}
 	fmt.Println(connections)
+	return connections
+}
+
+func AddRandomConnections(toAdd int, connections [][]int) [][]int {
+	maxAttempts := 100
+	added := 0
+	rnge := intrange.NewLinear(0, len(connections)-1)
+tryConnect:
+	for i := 0; i < maxAttempts && added < toAdd; i++ {
+		a := rnge.Poll()
+		b := rnge.Poll()
+		if b == a {
+			b = (b + 1) % len(connections)
+		}
+		// Check that a to b is not used yet
+		for _, j := range connections[a] {
+			if j == b {
+				continue tryConnect
+			}
+		}
+		connections[a] = append(connections[a], b)
+		connections[b] = append(connections[b], a)
+		added++
+	}
 	return connections
 }
