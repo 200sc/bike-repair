@@ -21,7 +21,7 @@ type Tire struct {
 
 func NewTire() Tire {
 	return Tire{
-		thickness: 5.0,
+		thickness: tireThickness.Poll(),
 		color:     tireColor.Poll(),
 	}
 }

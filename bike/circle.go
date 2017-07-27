@@ -23,8 +23,8 @@ func drawCircle(rgba *image.RGBA, c color.Color, radius, thickness float64, offs
 	rVec := physics.NewVector(radius+offX, radius+offY)
 	delta := physics.AngleVector(0)
 	circum := 2 * radius * math.Pi
-	rotation := 360 / circum
-	for j := 0.0; j < circum; j++ {
+	rotation := 180 / circum
+	for j := 0.0; j < circum*2; j++ {
 		// Todo: determine angle increment needed
 		// uh duh its the circumference
 		delta.Rotate(rotation)

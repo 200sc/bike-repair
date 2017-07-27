@@ -13,6 +13,7 @@ var (
 	outRimColor     = colorrange.NewLinear(color.RGBA{0, 0, 0, 254}, color.RGBA{255, 255, 255, 254})
 	inRimThickness  = floatrange.NewLinear(1, 4)
 	outRimThickness = floatrange.NewLinear(2, 8)
+	rimRadius       = floatrange.NewLinear(30, 100)
 )
 
 type Rim struct {
@@ -30,10 +31,10 @@ func (r Rim) thickness() float64 {
 
 func NewRim() Rim {
 	return Rim{
-		outerThickness: 3.0,
-		innerThickness: 2.0,
+		outerThickness: outRimThickness.Poll(),
+		innerThickness: inRimThickness.Poll(),
 		outerColor:     outRimColor.Poll(),
 		innerColor:     inRimColor.Poll(),
-		radius:         50,
+		radius:         rimRadius.Poll(),
 	}
 }
